@@ -1,0 +1,13 @@
+.menu-price {
+  display: absolute;
+  right: 0;
+}
+.menu-item {
+  display: inline-block;
+}
+.menu-item-name {
+  margin-top: 0;
+}
+.preferences-container * {
+  display: inline-block;
+}

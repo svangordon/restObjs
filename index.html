@@ -1,9 +1,70 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="app">
 <head>
 	<title></title>
+	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.min.css">
+
+	<!-- jQuery is necessary for reasons that I do not understand -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+
+	<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+	<!-- Bootstrap: Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+
+	<!-- Bootstrap: Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+	<!-- Underscore -->
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+	<!-- Angular -->
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0-rc.0/angular.min.js"></script>
+
+	<!-- My CSS -->
+	<link rel="stylesheet" type="text/css" href="main.css">
+	<!-- My Angular / JS : -->
+	<script src="constructors.js"></script>
+	<script type="text/javascript" src="foodFactory.js"></script>
+	<script type="text/javascript" src="orderFactory.js"></script>
+	<script type="text/javascript" src="orderController.js"></script>
+	<script type="text/javascript" src="pageController.js"></script>
+	<script type="text/javascript" src="menuController.js"></script>
+
 </head>
-<body>
+<script src="vanilla.js"></script>
+<body ng-controller="pageController">
+
+	<div class="jumbotron">
+		<h1 ng-bind="restaurant.name"></h1>
+	</div>
+
+	<h3 ng-bind="restaurant.desc"></h3>
+
+	<div class="menu-container" ng-controller="menuController">
+		<h2>Our Menu</h2>
+		<div class="menu-item" ng-repeat="item in menu.plates track by $index" ng-click="addToOrder(item)">
+			<p class="menu-price pull-right"> {{ item.price | currency}}</p>
+			<h4 class="menu-item-name">{{ item.name }}</h4>
+			<p class="menu-item"> {{ item.stringify() }}</p>
+		</div>
+	</div>
+
+	<div class="order-container" ng-controller="orderController">
+		<h2>Your Order</h2>
+		<div class="preferences-container">
+			<h5>Please select dietary preferences</h5>
+				Vegan <input type="checkbox" value="vegan" ng-model="preferences.vegan">
+				Gluten Free <input type="checkbox" value="glutenFree" ng-model="preferences.glutenFree">
+				Citrus Free <input type="checkbox" value="citrusFree" ng-model="preferences.citrusFree">
+		</div>
+		<div class="order-item" ng-repeat="item in order track by $index" ng-click="record( item.getDietary() )" ng-class="{'bg-success': evalPrefs(item.getDietary()), 'bg-danger' : !evalPrefs(item.getDietary())}">
+			<p class="menu-price pull-right"> {{ item.price | currency}}</p>
+			<h4 class="menu-item-name">{{ item.name }}</h4>
+			<p class="menu-item success"> {{ item.stringify() }}</p>
+		</div>
+		<p class="pull-right">Total: {{orderTotal() | currency}}</p>
+	</div>
 
 </body>
 </html>
